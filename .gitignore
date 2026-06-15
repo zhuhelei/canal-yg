@@ -1,0 +1,17 @@
+# Java
+backend/target/
+backend/data/
+backend/uploads/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Logs
+*.log
+*.err
+
+# IDE
+.idea/
+.vscode/
+*.iml

@@ -13,6 +13,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${app.upload-dir}")
     private String uploadDir;
 
+    @Value("${app.mock-dir:D:/mock/mock}")
+    private String mockDir;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -28,5 +31,11 @@ public class WebConfig implements WebMvcConfigurer {
             location = location + "/";
         }
         registry.addResourceHandler("/uploads/**").addResourceLocations(location);
+
+        String mockLocation = Path.of(mockDir).toAbsolutePath().toUri().toString();
+        if (!mockLocation.endsWith("/")) {
+            mockLocation = mockLocation + "/";
+        }
+        registry.addResourceHandler("/mock-images/**").addResourceLocations(mockLocation);
     }
 }

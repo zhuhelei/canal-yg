@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -92,6 +92,7 @@ public class DroneChangeImageService {
         image.setPreviousImageUrl(fileStorageService.store(previousImage, month));
         image.setCurrentImageUrl(fileStorageService.store(currentImage, month));
         image.setChangeImageUrl(fileStorageService.store(changeImage, month));
+        image.setStatus("待核查");
         image.setCreatedAt(LocalDateTime.now());
         image.setUpdatedAt(LocalDateTime.now());
         return repository.save(image);
@@ -139,7 +140,7 @@ public class DroneChangeImageService {
     public DroneChangeImage updateGeometry(Long id, String geometryGeoJson) {
         DroneChangeImage image = get(id);
         image.setGeometryGeoJson(geometryGeoJson);
-        image.setStatus("已圈定");
+        image.setStatus("有变化");
         image.setUpdatedAt(LocalDateTime.now());
         return repository.save(image);
     }
@@ -147,7 +148,16 @@ public class DroneChangeImageService {
     @Transactional
     public DroneChangeImage approve(Long id) {
         DroneChangeImage image = get(id);
-        image.setStatus("审核通过");
+        image.setStatus("有变化");
+        image.setUpdatedAt(LocalDateTime.now());
+        return repository.save(image);
+    }
+
+    @Transactional
+    public DroneChangeImage markNoChange(Long id) {
+        DroneChangeImage image = get(id);
+        image.setGeometryGeoJson(null);
+        image.setStatus("无变化");
         image.setUpdatedAt(LocalDateTime.now());
         return repository.save(image);
     }

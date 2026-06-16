@@ -75,4 +75,9 @@ public class DroneChangeImageController {
     public DroneChangeImage approve(@PathVariable Long id) {
         return service.approve(id);
     }
+
+    @PutMapping("/{id}/no-change")
+    public DroneChangeImage markNoChange(@PathVariable Long id) {
+        return service.markNoChange(id);
+    }
 }

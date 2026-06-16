@@ -2,8 +2,8 @@
   <main class="page shell-page">
     <header class="topbar app-header">
       <div>
-        <h1>无人机影像变化核验</h1>
-        <p>左侧选择变化记录，右侧核验影像地图和变化范围</p>
+        <h1>无人机影像变化核查</h1>
+        <p>左侧选择变化记录，右侧核查影像地图和变化范围</p>
       </div>
     </header>
 
@@ -19,10 +19,10 @@
             <input v-model="query.regionName" placeholder="输入区域名称" />
           </label>
           <label>
-            核验状态
+            核查状态
             <select v-model="query.status">
               <option value="">全部</option>
-              <option value="待核查">待核验</option>
+              <option value="待核查">待核查</option>
               <option value="已圈定">已圈定</option>
               <option value="审核通过">审核通过</option>
             </select>
@@ -46,7 +46,7 @@
             <img :src="imageUrl(item.changeImageUrl)" alt="" />
             <span class="tile-info">
               <strong>{{ item.regionName }}</strong>
-              <small>{{ item.month }} · {{ displayStatus(item.status) }}</small>
+              <small>{{ item.month }} · {{ item.status }}</small>
               <small>{{ item.longitude }}, {{ item.latitude }}</small>
             </span>
           </button>
@@ -66,7 +66,7 @@
         <header class="detail-header">
           <div>
             <h2>{{ detail.regionName }}</h2>
-            <p>{{ detail.month }} · 中心点 {{ detail.longitude }}, {{ detail.latitude }} · {{ displayStatus(detail.status) }}</p>
+            <p>{{ detail.month }} · 中心点 {{ detail.longitude }}, {{ detail.latitude }} · {{ detail.status }}</p>
           </div>
           <div class="detail-actions">
             <button type="button" class="secondary" @click="approveRecord">审核通过</button>
@@ -95,7 +95,7 @@
       </section>
 
       <div v-else class="empty-state">
-        左侧选择一条变化影像记录开始核验
+        左侧选择一条变化影像记录开始核查
       </div>
     </section>
     </section>
@@ -322,10 +322,6 @@ function getPreviousMonth(month) {
   const [year, monthValue] = month.split('-').map(Number)
   const date = new Date(year, monthValue - 2, 1)
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-}
-
-function displayStatus(status) {
-  return status === '待核查' ? '待核验' : status
 }
 
 function startDraw() {

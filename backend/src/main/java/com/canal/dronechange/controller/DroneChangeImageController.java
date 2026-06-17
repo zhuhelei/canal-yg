@@ -1,12 +1,14 @@
 package com.canal.dronechange.controller;
 
 import com.canal.dronechange.dto.GeometryRequest;
+import com.canal.dronechange.dto.PlotInfoRequest;
 import com.canal.dronechange.entity.DroneChangeImage;
 import com.canal.dronechange.service.DroneChangeImageService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,16 +61,26 @@ public class DroneChangeImageController {
     }
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<DroneChangeImage> importZip(
+    public List<DroneChangeImage> importFile(
             @RequestParam @Pattern(regexp = "\\d{4}-\\d{2}", message = "月份格式应为 yyyy-MM") String month,
             @RequestPart MultipartFile zipFile
     ) throws IOException {
-        return service.importZip(month, zipFile);
+        return service.importFile(month, zipFile);
     }
 
     @PutMapping("/{id}/geometry")
     public DroneChangeImage updateGeometry(@PathVariable Long id, @Valid @RequestBody GeometryRequest request) {
         return service.updateGeometry(id, request.geometryGeoJson());
+    }
+
+    @PutMapping("/{id}/plot-info")
+    public DroneChangeImage updatePlotInfo(@PathVariable Long id, @RequestBody PlotInfoRequest request) {
+        return service.updatePlotInfo(id, request);
+    }
+
+    @DeleteMapping("/{id}/geometry")
+    public DroneChangeImage deleteGeometry(@PathVariable Long id) {
+        return service.deleteGeometry(id);
     }
 
     @PutMapping("/{id}/approve")

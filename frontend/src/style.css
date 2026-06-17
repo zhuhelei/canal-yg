@@ -2,6 +2,29 @@
   box-sizing: border-box;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d9e2ef transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #d9e2ef;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #c8d3e2;
+}
+
 body {
   margin: 0;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
@@ -65,7 +88,8 @@ button:disabled {
 .shell-page {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 720px;
   padding: 12px;
 }
 
@@ -77,14 +101,21 @@ button:disabled {
   box-shadow: 0 8px 24px rgb(15 23 42 / 4%);
 }
 
+.header-import {
+  min-width: 104px;
+}
+
 .main-layout {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
   gap: 14px;
+  align-items: stretch;
+  height: 100%;
   min-height: 0;
 }
 
 .record-rail {
+  align-self: stretch;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 14px;
@@ -123,6 +154,7 @@ button:disabled {
   align-content: start;
   gap: 10px;
   min-height: 0;
+  max-height: none;
   overflow-y: auto;
   padding-right: 2px;
 }
@@ -130,11 +162,11 @@ button:disabled {
 .record-tile {
   display: grid;
   grid-template-columns: 78px minmax(0, 1fr);
-  gap: 10px;
+  gap: 9px;
   align-items: center;
   width: 100%;
-  min-height: 118px;
-  padding: 9px;
+  min-height: 130px;
+  padding: 10px;
   color: #172033;
   border: 1px solid #e6ebf2;
   border-radius: 10px;
@@ -164,7 +196,7 @@ button:disabled {
 
 .tile-info {
   display: grid;
-  gap: 5px;
+  gap: 6px;
   min-width: 0;
   text-align: left;
 }
@@ -183,9 +215,69 @@ button:disabled {
   overflow: hidden;
   color: #667085;
   font-size: 12px;
-  line-height: 1.2;
+  line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.tile-region {
+  color: #7a8496;
+}
+
+.tile-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.status-pill,
+.draw-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border-radius: 999px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.status-pending {
+  color: #946200;
+  background: #fff4cc;
+}
+
+.status-changed {
+  color: #b42318;
+  background: #fee4e2;
+}
+
+.status-unchanged {
+  color: #067647;
+  background: #dcfae6;
+}
+
+.draw-done {
+  color: #175cd3;
+  background: #dbeafe;
+}
+
+.draw-empty {
+  color: #667085;
+  background: #eef2f6;
+}
+
+.coordinate-line {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.coord-icon {
+  color: #2463eb;
+  font-size: 13px;
+  line-height: 1;
 }
 
 .rail-empty,
@@ -223,14 +315,17 @@ button:disabled {
 
 .workspace {
   display: grid;
-  align-content: start;
   gap: 16px;
   min-width: 0;
+  min-height: 0;
 }
 
 .detail-page {
   display: grid;
+  grid-template-rows: auto auto minmax(420px, 1fr);
   gap: 16px;
+  height: 100%;
+  min-height: 0;
 }
 
 .topbar,
@@ -270,6 +365,13 @@ button:disabled {
 .hint {
   margin: 6px 0 0;
   color: #667085;
+}
+
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
 }
 
 label {
@@ -330,14 +432,15 @@ figcaption {
 .preview-map {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  min-height: 340px;
+  height: 320px;
+  min-height: 320px;
 }
 
 .map-panel {
   position: relative;
   width: 100%;
-  min-height: clamp(380px, 44vh, 640px);
+  min-height: 420px;
+  height: 100%;
   overflow: hidden;
   border-radius: 14px;
   background: #fff;
@@ -346,7 +449,8 @@ figcaption {
 
 .map {
   width: 100%;
-  height: clamp(380px, 44vh, 640px);
+  height: 100%;
+  min-height: 420px;
 }
 
 .leaflet-control-attribution {
@@ -356,7 +460,7 @@ figcaption {
 .map-actions {
   position: absolute;
   top: 14px;
-  right: 14px;
+  left: 14px;
   z-index: 500;
   display: flex;
   gap: 10px;
@@ -435,9 +539,9 @@ figcaption {
 }
 
 .plot-mask {
-  align-items: start;
+  align-items: center;
   overflow: auto;
-  padding: 6px 12px 28px;
+  padding: 20px;
 }
 
 .plot-dialog {
@@ -448,7 +552,7 @@ figcaption {
   max-height: calc(100vh - 24px);
   margin: 0 auto;
   overflow: auto;
-  padding: 24px 18px 16px;
+  padding: 22px 18px 16px;
   border-radius: 6px;
   background: #fff;
   box-shadow: 0 22px 54px rgb(15 23 42 / 26%);
@@ -465,9 +569,9 @@ figcaption {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 18px 32px 16px 0;
+  margin: 6px 32px 14px 0;
   color: #172033;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -487,6 +591,16 @@ figcaption {
   background: #f4c044;
 }
 
+.plot-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 900;
+}
+
 .plot-info-table {
   display: grid;
   grid-template-columns: 120px minmax(0, 1fr) 120px minmax(0, 1fr);
@@ -500,7 +614,7 @@ figcaption {
   min-height: 38px;
   border-right: 1px solid #c9d5e5;
   border-bottom: 1px solid #c9d5e5;
-  padding: 9px 10px;
+  padding: 6px 8px;
   word-break: break-all;
 }
 
@@ -510,18 +624,33 @@ figcaption {
   font-weight: 900;
 }
 
+.plot-location-value {
+  grid-column: span 3;
+}
+
+.plot-info-table input,
+.plot-info-table select {
+  min-height: 28px;
+  border: 0;
+  border-radius: 4px;
+  padding: 3px 4px;
+  color: #304057;
+  background: transparent;
+  font-size: 14px;
+}
+
+.plot-info-table input:focus,
+.plot-info-table select:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgb(36 99 235 / 12%);
+}
+
 .plot-compare {
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .plot-compare h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 12px;
-  color: #172033;
-  font-size: 18px;
-  font-weight: 900;
+  margin-bottom: 10px;
 }
 
 .compare-images {
@@ -532,13 +661,14 @@ figcaption {
 
 .compare-images figure {
   position: relative;
-  height: 126px;
+  height: 220px;
   border-radius: 10px;
   overflow: hidden;
   background: #edf2f8;
   box-shadow: none;
 }
 
+.compare-map,
 .compare-images img {
   width: 100%;
   height: 100%;
@@ -571,6 +701,19 @@ figcaption {
   min-height: 42px;
   border-radius: 8px;
   font-size: 15px;
+}
+
+.danger-button {
+  color: #b42318;
+  border-color: #fecaca;
+  background: #fff5f5;
+  box-shadow: none;
+}
+
+.danger-button:hover {
+  color: #fff;
+  border-color: #d92d20;
+  background: #d92d20;
 }
 
 @media (max-width: 1100px) {

@@ -276,7 +276,25 @@ const currentDate = computed(() => `${detail.value?.month || defaultMonth}-05`)
 const plotCode = computed(() => `WB${String(detail.value?.id || 0).padStart(16, '0')}`)
 const plotArea = computed(() => formatArea(detail.value))
 const hasSavedPlotInfo = computed(() => Boolean(detail.value?.geometryGeoJson))
-const satelliteTileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+const satelliteTileUrl = 'https://ditu.zjzwfw.gov.cn/services/wmts/imgmap/default/oss?service=WMTS&request=GetTile&version=1.0.0&layer=mapSatellite&style=&tilematrixset=imgmap&format=image%2Fjpeg&height=256&width=256&tilematrix={z}&tilerow={y}&tilecol={x}&token=051eb92d-6fba-426f-9de7-14e786d3fa9a'
+const droneImageUrl = 'https://szyh.ywj.hangzhou.gov.cn:10443/map-layer/2025-06/result-7_png/_alllayers/L{z}/R{y}/C{x}.png'
+
+function toHex(value, length) {
+  return value.toString(16).padStart(length, '0')
+}
+
+if (!L.TileLayer.ArcGIS) {
+  L.TileLayer.ArcGIS = L.TileLayer.extend({
+    getTileUrl(coords) {
+      const map = this._map
+      const zoom = map.getZoom()
+      const col = toHex(coords.x, 8)
+      const row = toHex(coords.y, 8)
+      return L.Util.template(this._url, { x: col, y: row, z: zoom, s: this._getSubdomain(coords) })
+    }
+  })
+}
+
 const totalPages = computed(() => Math.max(1, Math.ceil(items.value.length / pageSize)))
 const pagedItems = computed(() => items.value.slice((currentPage.value - 1) * pageSize, currentPage.value * pageSize))
 
@@ -373,15 +391,17 @@ function createLeafletMap(target, enableGeometry) {
   if (!target) return null
   const center = getCenterLatLng()
   const map = L.map(target, {
+    crs: L.CRS.EPSG4326,
     center,
-    zoom: hasValidCenter() ? 16 : 10,
-    minZoom: 3,
-    maxZoom: 21,
+    zoom: hasValidCenter() ? 14 : 10,
+    minZoom: 1,
+    maxZoom: 19,
     zoomControl: false,
     attributionControl: false
   })
 
-  L.tileLayer(satelliteTileUrl, { maxZoom: 21, minZoom: 3, crossOrigin: true }).addTo(map)
+  L.tileLayer(satelliteTileUrl, { zoomOffset: 1, maxZoom: 19, minZoom: 1, crossOrigin: true }).addTo(map)
+  new L.TileLayer.ArcGIS(droneImageUrl, { zoomOffset: 0, maxZoom: 21, minZoom: 10, noWrap: true, tms: false, crossOrigin: true }).addTo(map)
   L.control.zoom({ position: 'topright' }).addTo(map)
   L.circleMarker(center, { radius: 7, color: '#f04438', weight: 2, fillColor: '#f04438', fillOpacity: 1 }).addTo(map)
   if (enableGeometry) initDrawMap(map)
@@ -392,12 +412,13 @@ function createLeafletMap(target, enableGeometry) {
 function createCompareMap(target, sourceMap) {
   if (!target) return null
   const center = sourceMap?.getCenter?.() || L.latLng(getCenterLatLng())
-  const zoom = sourceMap?.getZoom?.() || (hasValidCenter() ? 16 : 10)
+  const zoom = sourceMap?.getZoom?.() || (hasValidCenter() ? 14 : 10)
   const map = L.map(target, {
+    crs: L.CRS.EPSG4326,
     center,
     zoom,
-    minZoom: 3,
-    maxZoom: 21,
+    minZoom: 1,
+    maxZoom: 19,
     zoomControl: false,
     attributionControl: false,
     dragging: false,
@@ -407,7 +428,8 @@ function createCompareMap(target, sourceMap) {
     keyboard: false,
     tap: false
   })
-  L.tileLayer(satelliteTileUrl, { maxZoom: 21, minZoom: 3, crossOrigin: true }).addTo(map)
+  L.tileLayer(satelliteTileUrl, { zoomOffset: 1, maxZoom: 19, minZoom: 1, crossOrigin: true }).addTo(map)
+  new L.TileLayer.ArcGIS(droneImageUrl, { zoomOffset: 0, maxZoom: 21, minZoom: 10, noWrap: true, tms: false, crossOrigin: true }).addTo(map)
   requestAnimationFrame(() => map.invalidateSize())
   return map
 }
@@ -528,7 +550,7 @@ function destroyCompareMaps() {
 }
 
 function getCenterLatLng() {
-  return [Number(detail.value?.latitude || 39.909), Number(detail.value?.longitude || 116.397)]
+  return [Number(detail.value?.latitude || 30.3), Number(detail.value?.longitude || 120.12)]
 }
 
 function hasValidCenter() {

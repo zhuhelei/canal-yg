@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: ${DM_DATASOURCE_URL:jdbc:dm://localhost:5236/DRONE_CHANGE}
-    username: ${DM_DATASOURCE_USERNAME:SYSDBA}
-    password: ${DM_DATASOURCE_PASSWORD:SYSDBA}
+    url: ${DM_DATASOURCE_URL:jdbc:dm://111.0.82.17:8890/DEV_DB}
+    username: ${DM_DATASOURCE_USERNAME:DEV_DB}
+    password: ${DM_DATASOURCE_PASSWORD:bwt@1qaz!QAZ}
     driver-class-name: dm.jdbc.driver.DmDriver
   jpa:
     hibernate:

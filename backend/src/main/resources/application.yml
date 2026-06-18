@@ -3,17 +3,15 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:file:./data/drone-change
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
+    url: jdbc:dm://111.0.82.17:8890/DEV_DB
+    username: DEV_DB
+    password: bwt@1qaz!QAZ
+    driver-class-name: dm.jdbc.driver.DmDriver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: false
+    database-platform: org.hibernate.dialect.OracleDialect
     properties:
       hibernate:
         format_sql: true

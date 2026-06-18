@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
@@ -13,9 +14,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "drone_change_images")
+@SequenceGenerator(name = "drone_change_images_seq", sequenceName = "SEQ_DRONE_CHANGE_IMAGES", allocationSize = 1)
 public class DroneChangeImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "drone_change_images_seq")
     private Long id;
 
     private Long projectId;

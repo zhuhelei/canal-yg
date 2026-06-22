@@ -53,11 +53,9 @@ public class DroneChangeImageController {
             @RequestParam(required = false) BigDecimal longitude,
             @RequestParam(required = false) BigDecimal latitude,
             @RequestParam(required = false) String regionName,
-            @RequestPart(required = false) MultipartFile previousImage,
-            @RequestPart(required = false) MultipartFile currentImage,
             @RequestPart MultipartFile changeImage
     ) throws IOException {
-        return service.create(projectId, month, longitude, latitude, regionName, previousImage, currentImage, changeImage);
+        return service.create(projectId, month, longitude, latitude, regionName, changeImage);
     }
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

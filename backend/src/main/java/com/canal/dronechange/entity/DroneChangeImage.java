@@ -25,12 +25,6 @@ public class DroneChangeImage {
     @Column(name = "image_month", length = 7, nullable = false)
     private String month;
 
-    @Column(length = 500)
-    private String previousImageUrl;
-
-    @Column(length = 500)
-    private String currentImageUrl;
-
     @Column(length = 500, nullable = false)
     private String changeImageUrl;
 
@@ -75,22 +69,6 @@ public class DroneChangeImage {
 
     public void setMonth(String month) {
         this.month = month;
-    }
-
-    public String getPreviousImageUrl() {
-        return previousImageUrl;
-    }
-
-    public void setPreviousImageUrl(String previousImageUrl) {
-        this.previousImageUrl = previousImageUrl;
-    }
-
-    public String getCurrentImageUrl() {
-        return currentImageUrl;
-    }
-
-    public void setCurrentImageUrl(String currentImageUrl) {
-        this.currentImageUrl = currentImageUrl;
     }
 
     public String getChangeImageUrl() {

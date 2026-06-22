@@ -3,10 +3,13 @@ server:
 
 spring:
   datasource:
-    url: ${DM_DATASOURCE_URL:jdbc:dm://111.0.82.17:8890/DEV_DB}
+    url: ${DM_DATASOURCE_URL:jdbc:dm://111.0.82.17:8890/DEV_DB?loginTimeout=10&socketTimeout=30000}
     username: ${DM_DATASOURCE_USERNAME:DEV_DB}
     password: ${DM_DATASOURCE_PASSWORD:bwt@1qaz!QAZ}
     driver-class-name: dm.jdbc.driver.DmDriver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
   jpa:
     hibernate:
       ddl-auto: ${JPA_DDL_AUTO:update}

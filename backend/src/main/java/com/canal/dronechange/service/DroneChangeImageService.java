@@ -83,8 +83,6 @@ public class DroneChangeImageService {
             BigDecimal longitude,
             BigDecimal latitude,
             String regionName,
-            MultipartFile previousImage,
-            MultipartFile currentImage,
             MultipartFile changeImage
     ) throws IOException {
         if (changeImage == null || changeImage.isEmpty()) {
@@ -98,8 +96,6 @@ public class DroneChangeImageService {
         image.setLongitude(geoPoint.longitude());
         image.setLatitude(geoPoint.latitude());
         image.setRegionName(geoCoordinateService.resolveRegion(geoPoint.longitude(), geoPoint.latitude(), regionName));
-        image.setPreviousImageUrl(fileStorageService.store(previousImage, month));
-        image.setCurrentImageUrl(fileStorageService.store(currentImage, month));
         image.setChangeImageUrl(fileStorageService.store(changeImage, month));
         image.setStatus("待核查");
         image.setCreatedAt(LocalDateTime.now());
@@ -181,8 +177,6 @@ public class DroneChangeImageService {
                 image.setLongitude(readDecimal(row, headers, formatter, "longitude", BigDecimal.ZERO));
                 image.setLatitude(readDecimal(row, headers, formatter, "latitude", BigDecimal.ZERO));
                 image.setRegionName(readCell(row, headers, formatter, "regionName", "未命名区域"));
-                image.setPreviousImageUrl(readCell(row, headers, formatter, "previousImageUrl", null));
-                image.setCurrentImageUrl(readCell(row, headers, formatter, "currentImageUrl", null));
                 image.setChangeImageUrl(readCell(row, headers, formatter, "changeImageUrl", ""));
                 image.setStatus("待核查");
                 image.setCreatedAt(LocalDateTime.now());
@@ -218,12 +212,6 @@ public class DroneChangeImageService {
         }
         if (request.latitude() != null) {
             image.setLatitude(request.latitude());
-        }
-        if (request.previousImageUrl() != null) {
-            image.setPreviousImageUrl(request.previousImageUrl());
-        }
-        if (request.currentImageUrl() != null) {
-            image.setCurrentImageUrl(request.currentImageUrl());
         }
         if (request.changeImageUrl() != null) {
             image.setChangeImageUrl(request.changeImageUrl());
@@ -331,8 +319,6 @@ public class DroneChangeImageService {
             case "regionName" -> List.of("所属区域", "区域", "区县", "县市区名称", "regionName", "region");
             case "longitude" -> List.of("中心经度", "经度", "longitude", "lng", "lon");
             case "latitude" -> List.of("中心纬度", "纬度", "latitude", "lat");
-            case "previousImageUrl" -> List.of("前时相影像", "前时相图片", "previousImageUrl", "previousImage", "beforeImage");
-            case "currentImageUrl" -> List.of("后时相影像", "正射影像", "currentImageUrl", "currentImage", "afterImage");
             case "changeImageUrl" -> List.of("变化影像", "变化图片", "影像路径", "changeImageUrl", "changeImage", "imageUrl");
             default -> List.of(field);
         };

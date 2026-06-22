@@ -6,8 +6,6 @@ public record PlotInfoRequest(
         String regionName,
         BigDecimal longitude,
         BigDecimal latitude,
-        String previousImageUrl,
-        String currentImageUrl,
         String changeImageUrl
 ) {
 }
